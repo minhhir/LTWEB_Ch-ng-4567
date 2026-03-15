@@ -6,10 +6,13 @@ from products import products_bp
 from register import register_bp
 from cart import cart_bp
 from admin import admin_bp
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = '@HoangNangMinh11112005'
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-key')
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(articles_bp)
