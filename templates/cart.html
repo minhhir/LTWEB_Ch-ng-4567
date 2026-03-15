@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">🛒 Giỏ hàng của bạn</h4>
+        <span class="badge bg-light text-dark">{{ carts|length }} sản phẩm</span>
+    </div>
+
+    <div class="card-body">
+        {% if carts %}
+
+        <form method="POST" action="{{ url_for('cart.update_cart') }}">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng hiện tại</th>
+                            <th>Cập nhật số lượng</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in carts %}
+                        <tr>
+                            <td>
+                                {% if product['picture'] %}
+                                    <img src="{{ product['picture'] }}"
+                                         style="max-height:60px; width:auto;"
+                                         alt="{{ product['name'] }}">
+                                {% else %}
+                                    <span class="text-muted">No IMG</span>
+                                {% endif %}
+                            </td>
+                            <td class="fw-bold text-primary">{{ product['name'] }}</td>
+                            <td class="text-danger fw-bold">{{ product['price'] }}</td>
+                            <td>{{ product['quantity'] }}</td>
+
+                            <td>
+                                <input type="number"
+                                       name="quantity-{{ product['id'] }}"
+                                       value="{{ product['quantity'] }}"
+                                       min="0"
+                                       class="form-control form-control-sm"
+                                       style="width: 80px;">
+                            </td>
+
+                            <td class="text-center">
+                                <input type="checkbox"
+                                       name="delete-{{ product['id'] }}"
+                                       class="form-check-input"
+                                       title="Đánh dấu để xóa">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex gap-2 flex-wrap mt-2">
+                <button type="submit" class="btn btn-warning">
+                    🔄 Cập nhật giỏ hàng
+                </button>
+
+                <button type="button" class="btn btn-danger"
+                        onclick="document.getElementById('clearForm').submit()">
+                    🗑 Xóa toàn bộ
+                </button>
+            </div>
+        </form>
+
+        <!-- Form xóa toàn bộ (ẩn) -->
+        <form id="clearForm" method="POST"
+              action="{{ url_for('cart.clear_cart') }}"></form>
+
+        <hr class="my-4">
+
+        <h5 class="mb-3">Tạo đơn hàng</h5>
+        <form method="POST" action="{{ url_for('cart.proceed_cart') }}">
+            <button type="submit" class="btn btn-success btn-lg"
+                    onclick="return confirm('Xác nhận đặt hàng?')">
+                Proceed — Đặt hàng ngay
+            </button>
+        </form>
+
+        {% else %}
+            <div class="alert alert-info text-center">
+                Giỏ hàng đang trống.
+            </div>
+        {% endif %}
+
+        <a href="{{ url_for('products.search_products') }}"
+           class="btn btn-outline-primary mt-3">
+            ← Tiếp tục mua hàng
+        </a>
+    </div>
+</div>
+{% endblock %}

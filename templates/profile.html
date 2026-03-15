@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card mx-auto shadow-sm" style="max-width: 500px;">
+    <div class="card-header bg-info text-white">
+        Thông tin người dùng
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="mb-3">
+                <label class="form-label">Tên đăng nhập</label>
+                <input type="text" class="form-control" value="{{ user.username }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Vai trò</label>
+                <input type="text" class="form-control" value="{{ user.role }}" readonly>
+            </div>
+        </form>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-danger w-100">Đăng xuất</a>
+    </div>
+</div>
+{% endblock %}

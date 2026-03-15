@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-4">Đơn hàng của tôi</h4>
+
+{% if orders %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle border">
+        <thead class="table-dark">
+            <tr>
+                <th>#ID</th>
+                <th>Ngày đặt</th>
+                <th>Ngày giao</th>
+                <th>Trạng thái</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in orders %}
+            <tr>
+                <td class="fw-bold">#{{ o['id'] }}</td>
+                <td>{{ o['purchase_date'] }}</td>
+                <td>{{ o['ship_date'] or '—' }}</td>
+                <td>
+                    {% if o['status'] == 0 %}
+                        <span class="badge bg-warning text-dark"> Chờ xử lý</span>
+                    {% elif o['status'] == 1 %}
+                        <span class="badge bg-info">Đang giao</span>
+                    {% elif o['status'] == 2 %}
+                        <span class="badge bg-success"> Đã giao</span>
+                    {% elif o['status'] == 3 %}
+                        <span class="badge bg-danger"> Đã hủy</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('cart.order_detail', order_id=o['id']) }}"
+                       class="btn btn-sm btn-outline-primary">
+                        Xem chi tiết
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">Tổng: {{ orders|length }} đơn hàng</p>
+{% else %}
+    <div class="alert alert-info text-center">
+        Bạn chưa có đơn hàng nào.
+    </div>
+{% endif %}
+
+<a href="{{ url_for('products.search_products') }}"
+   class="btn btn-outline-secondary mt-2">
+    ← Tiếp tục mua hàng
+</a>
+{% endblock %}

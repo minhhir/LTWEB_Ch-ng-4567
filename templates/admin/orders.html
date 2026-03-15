@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Quản lý đơn hàng</h4>
+    <span class="badge bg-secondary fs-6">{{ orders|length }} đơn</span>
+</div>
+
+{% if orders %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle border">
+        <thead class="table-dark">
+            <tr>
+                <th>#ID</th>
+                <th>Khách hàng</th>
+                <th>Ngày đặt</th>
+                <th>Ngày giao</th>
+                <th>Số SP</th>
+                <th>Trạng thái</th>
+                <th>Xử lý</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in orders %}
+            <tr>
+                <td class="fw-bold">#{{ o['id'] }}</td>
+                <td>{{ o['user_email'] }}</td>
+                <td>{{ o['purchase_date'] }}</td>
+                <td>{{ o['ship_date'] or '—' }}</td>
+                <td>
+                    <span class="badge bg-secondary">
+                        {{ o['item_count'] }} sản phẩm
+                    </span>
+                </td>
+                <td>
+                    {% if o['status'] == 0 %}
+                        <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                    {% elif o['status'] == 1 %}
+                        <span class="badge bg-info"> Đang giao</span>
+                    {% elif o['status'] == 2 %}
+                        <span class="badge bg-success">Đã giao</span>
+                    {% elif o['status'] == 3 %}
+                        <span class="badge bg-danger"> Đã hủy</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('admin.order_detail', order_id=o['id']) }}"
+                       class="btn btn-sm btn-primary">
+                         Xử lý
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="alert alert-info">Chưa có đơn hàng nào.</div>
+{% endif %}
+
+<a href="{{ url_for('admin.index') }}"
+   class="btn btn-outline-secondary mt-2">
+    ← Quản lý sản phẩm
+</a>
+{% endblock %}

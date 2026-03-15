@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Tra cứu điểm sinh viên</h2>
+
+<form method="post" class="mb-4">
+    <div class="row g-2">
+        <div class="col-md-8">
+            <input type="text" name="keyword" class="form-control"
+                   placeholder="Nhập tên sinh viên..." value="{{ keyword }}">
+        </div>
+
+        <div class="col-md-2">
+            <select name="gender" class="form-select">
+                <option value="all">Tất cả giới tính</option>
+                <option value="female" {% if gender_filter == 'female' %}selected{% endif %}>Nữ (Female)</option>
+                <option value="male" {% if gender_filter == 'male' %}selected{% endif %}>Nam (Male)</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-search"></i> Tìm kiếm
+            </button>
+        </div>
+    </div>
+</form>
+
+{% if results %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover border align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Giới tính</th>
+                    <th>Tuổi</th>
+                    <th>Điểm số</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ row.fname }} {{ row.lname }}</td>
+                    <td>
+                        {% if row.gender == 'female' %}
+                            <span class="badge bg-danger-subtle text-danger border border-danger">Nữ</span>
+                        {% else %}
+                            <span class="badge bg-primary-subtle text-primary border border-primary">Nam</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ row.age }}</td>
+                    <td class="fw-bold">{{ row.grade }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="text-muted small mt-2">Tìm thấy {{ results|length }} kết quả.</p>
+    </div>
+{% elif keyword or gender_filter %}
+    <div class="alert alert-warning text-center">
+        Không tìm thấy sinh viên nào phù hợp với điều kiện tìm kiếm.
+    </div>
+{% endif %}
+{% endblock %}

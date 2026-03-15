@@ -1,0 +1,19 @@
+<!-- my_flask_app/templates/articles.html -->
+{% extends "base.html" %}
+{% block content %}
+  {% if article %}
+    <h2 class="h4 mb-3">{{ article.title }}</h2>
+    <p>{{ article.content }}</p>
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('articles.article_list') }}">← Quay lại danh sách</a>
+  {% else %}
+    <h2 class="h4 mb-3">Danh sách bài viết</h2>
+    <ul class="list-group">
+      {% for a in articles %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ a.title }}</span>
+          <a class="btn btn-sm btn-primary" href="{{ url_for('articles.article_detail', article_id=a.id) }}">Xem</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

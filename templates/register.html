@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_registration.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Account</h1>
+        <form method="POST" action="{{ url_for('register.create_account') }}">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="{{ request.form.username or '' }}">
+            <span class="error-text">{{ username_error }}</span>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ request.form.email or '' }}">
+            <span class="error-text">{{ email_error }}</span>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <span class="error-text">{{ password_error }}</span>
+
+            <button type="submit">Register</button>
+        </form>
+        
+        {% if registration_success %}
+            <p class="success-message">{{ registration_success }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-1">
+     Chi tiết đơn hàng
+    <span class="text-primary">#{{ order['id'] }}</span>
+</h4>
+<p class="text-muted mb-4">
+    Ngày đặt: <strong>{{ order['purchase_date'] }}</strong>
+    &nbsp;|&nbsp;
+    Ngày giao: <strong>{{ order['ship_date'] or '—' }}</strong>
+    &nbsp;|&nbsp;
+    Trạng thái:
+    {% if order['status'] == 0 %}
+        <span class="badge bg-warning text-dark"> Chờ xử lý</span>
+    {% elif order['status'] == 1 %}
+        <span class="badge bg-info"> Đang giao</span>
+    {% elif order['status'] == 2 %}
+        <span class="badge bg-success">Đã giao</span>
+    {% elif order['status'] == 3 %}
+        <span class="badge bg-danger">Đã hủy</span>
+    {% endif %}
+</p>
+
+{% if order_details %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle border">
+        <thead class="table-dark">
+            <tr>
+                <th>Ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Brand</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_details %}
+            <tr>
+                <td>
+                    {% if item['picture'] %}
+                        <img src="{{ item['picture'] }}"
+                             style="max-height:60px; width:auto;"
+                             alt="{{ item['model'] }}">
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td class="fw-bold text-primary">{{ item['model'] }}</td>
+                <td>
+                    <span class="badge bg-info text-dark">{{ item['brand'] }}</span>
+                </td>
+                <td class="text-danger">{{ item['price'] }}</td>
+                <td>{{ item['quantity'] }}</td>
+                <td class="fw-bold">
+                    {{ "%.2f"|format(item['subtotal']) }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="alert alert-warning">
+        Không có sản phẩm trong đơn hàng này.
+    </div>
+{% endif %}
+
+<a href="{{ url_for('cart.orders') }}"
+   class="btn btn-outline-primary mt-3">
+    ← Quay lại danh sách đơn hàng
+</a>
+{% endblock %}

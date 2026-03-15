@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-1">
+     Chi tiết đơn hàng
+    <span class="text-primary">#{{ order['id'] }}</span>
+</h4>
+<p class="text-muted mb-4">
+    Khách: <strong>{{ order['user_email'] }}</strong>
+    &nbsp;|&nbsp;
+    Ngày đặt: <strong>{{ order['purchase_date'] }}</strong>
+    &nbsp;|&nbsp;
+    Trạng thái:
+    {% if order['status'] == 0 %}
+        <span class="badge bg-warning text-dark"> Chờ xử lý</span>
+    {% elif order['status'] == 1 %}
+        <span class="badge bg-info"> Đang giao</span>
+    {% elif order['status'] == 2 %}
+        <span class="badge bg-success"> Đã giao</span>
+    {% elif order['status'] == 3 %}
+        <span class="badge bg-danger"> Đã hủy</span>
+    {% endif %}
+</p>
+
+<!-- Bảng sản phẩm trong đơn -->
+<div class="table-responsive mb-4">
+    <table class="table table-hover align-middle border">
+        <thead class="table-dark">
+            <tr>
+                <th>Ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Brand</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_details %}
+            <tr>
+                <td>
+                    {% if item['picture'] %}
+                        <img src="{{ item['picture'] }}"
+                             style="max-height:50px; width:auto;"
+                             alt="{{ item['model'] }}">
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td class="fw-bold text-primary">{{ item['model'] }}</td>
+                <td>
+                    <span class="badge bg-info text-dark">{{ item['brand'] }}</span>
+                </td>
+                <td class="text-danger">{{ item['price'] }}</td>
+                <td>{{ item['quantity'] }}</td>
+                <td class="fw-bold">
+                    {{ "%.2f"|format(item['subtotal']) }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Form cập nhật trạng thái — chỉ admin thấy -->
+<div class="card shadow-sm" style="max-width: 450px;">
+    <div class="card-header bg-warning fw-bold">
+        Cập nhật trạng thái đơn hàng
+    </div>
+    <div class="card-body">
+        <form method="POST"
+              action="{{ url_for('admin.order_detail', order_id=order['id']) }}">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Trạng thái</label>
+                <select name="status" class="form-select">
+                    <option value="0" {% if order['status']==0 %}selected{% endif %}>
+                         Chờ xử lý
+                    </option>
+                    <option value="1" {% if order['status']==1 %}selected{% endif %}>
+                         Đang giao
+                    </option>
+                    <option value="2" {% if order['status']==2 %}selected{% endif %}>
+                         Đã giao
+                    </option>
+                    <option value="3" {% if order['status']==3 %}selected{% endif %}>
+                         Đã hủy
+                    </option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Ngày giao hàng</label>
+                <input type="date" name="ship_date" class="form-control"
+                       value="{{ order['ship_date'] or '' }}">
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100">
+                 Lưu cập nhật
+            </button>
+        </form>
+    </div>
+</div>
+
+<a href="{{ url_for('admin.orders') }}"
+   class="btn btn-outline-secondary mt-3">
+    ← Quay lại danh sách đơn hàng
+</a>
+{% endblock %}

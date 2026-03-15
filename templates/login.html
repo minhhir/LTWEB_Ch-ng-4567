@@ -1,0 +1,22 @@
+<!-- my_flask_app/templates/login.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="h4 mb-3">Đăng nhập</h2>
+  <form method="post" class="row g-3" novalidate>
+    <div class="col-12">
+      <label for="username" class="form-label">Tên đăng nhập</label>
+      <input id="username" name="username" class="form-control" required />
+    </div>
+    <div class="col-12">
+      <label for="password" class="form-label">Mật khẩu</label>
+      <input id="password" name="password" type="password" class="form-control" required />
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary">Đăng nhập</button>
+    </div>
+    <div class="col-12 mt-2">
+     <p>Chưa có tài khoản? <a href="{{ url_for('register.create_account') }}">Đăng ký ngay</a></p>
+    </div>
+  </form>
+  <p class="text-muted mt-3 small">Gợi ý: dùng admin/123 để xem thông báo thành công.</p>
+{% endblock %}
