@@ -157,8 +157,7 @@ CREATE TABLE orders (
 
 ### 1. Clone repo
 ```bash
-git clone https://github.com/<your-username>/flask-blueprint-shop.git
-cd flask-blueprint-shop
+git clone https://github.com/minhhir/LTWEB_Ch-ng-4567
 ```
 
 ### 2. Tạo virtual environment
