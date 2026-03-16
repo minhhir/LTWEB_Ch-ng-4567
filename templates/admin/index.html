@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0">⚙️ Quản lý sản phẩm</h4>
+    <h4 class="mb-0">Quản lý sản phẩm</h4>
     <a href="{{ url_for('admin.add') }}" class="btn btn-success btn-sm">
-        ➕ Thêm sản phẩm
+        Thêm sản phẩm
     </a>
 </div>
 
@@ -40,13 +40,13 @@
                 <td class="text-danger fw-bold">{{ s['price'] }}</td>
                 <td>
                     <a href="{{ url_for('admin.edit', storage_id=s['id']) }}"
-                       class="btn btn-sm btn-warning">✏️ Sửa</a>
+                       class="btn btn-sm btn-warning">Sửa</a>
 
                     <form method="POST"
                           action="{{ url_for('admin.delete', storage_id=s['id']) }}"
                           style="display:inline;"
                           onsubmit="return confirm('Xóa sản phẩm này?')">
-                        <button class="btn btn-sm btn-danger">🗑 Xóa</button>
+                        <button class="btn btn-sm btn-danger"> Xóa</button>
                     </form>
                 </td>
             </tr>
